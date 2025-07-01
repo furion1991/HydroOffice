@@ -21,6 +21,7 @@ namespace HydroOffice
         {
             InitializeComponent();
             DataContext = vm;
+            WindowState = WindowState.Maximized;
         }
     }
 }

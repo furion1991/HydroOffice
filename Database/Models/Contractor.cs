@@ -8,5 +8,5 @@ public class Contractor
 
     public virtual string INN { get; set; }
 
-    public virtual Employee Curator { get; set; }
+    public virtual Employee? Curator { get; set; }
 }

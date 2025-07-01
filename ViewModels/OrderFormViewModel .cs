@@ -27,6 +27,8 @@ public class OrderFormViewModel : INotifyPropertyChanged
     }
 
     public RelayCommand SaveCommand { get; }
+    public RelayCommand ClearEmployeeCommand { get; }
+    public RelayCommand ClearContractorCommand { get; }
 
     public OrderFormViewModel(
         IRepository<Order> orderRepository,
@@ -43,6 +45,8 @@ public class OrderFormViewModel : INotifyPropertyChanged
         Order = order ?? new Order { Date = DateTime.Today };
 
         SaveCommand = new RelayCommand(async _ => await Save());
+        ClearContractorCommand = new RelayCommand(_ => Order.Contractor = null);
+        ClearEmployeeCommand = new RelayCommand(_ => Order.Employee = null);
         _ = LoadData();
     }
 
@@ -66,18 +70,6 @@ public class OrderFormViewModel : INotifyPropertyChanged
         if (Order.Amount <= 0)
         {
             ErrorMessage = "Сумма должна быть положительной.";
-            return;
-        }
-
-        if (Order.Employee == null)
-        {
-            ErrorMessage = "Выберите сотрудника.";
-            return;
-        }
-
-        if (Order.Contractor == null)
-        {
-            ErrorMessage = "Выберите контрагента.";
             return;
         }
 

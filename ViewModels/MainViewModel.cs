@@ -32,7 +32,8 @@ public class MainViewModel : INotifyPropertyChanged
     {
         CurrentViewModel = new EmployeeListViewModel(
             _provider.GetRequiredService<IRepository<Employee>>(),
-            ShowEmployeeForm);
+            ShowEmployeeForm,
+            _provider.GetRequiredService<IRepository<Order>>());
         OnPropertyChanged(nameof(CurrentViewModel));
     }
 
@@ -49,7 +50,8 @@ public class MainViewModel : INotifyPropertyChanged
     {
         CurrentViewModel = new ContractorListViewModel(
             _provider.GetRequiredService<IRepository<Contractor>>(),
-            ShowContractorForm);
+            ShowContractorForm,
+            _provider.GetRequiredService<IRepository<Order>>());
         OnPropertyChanged(nameof(CurrentViewModel));
     }
 

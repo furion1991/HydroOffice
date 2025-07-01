@@ -8,7 +8,7 @@ public class Order
 
     public virtual decimal Amount { get; set; }
 
-    public virtual Employee Employee { get; set; }
+    public virtual Employee? Employee { get; set; }
 
-    public virtual Contractor Contractor { get; set; }
+    public virtual Contractor? Contractor { get; set; }
 }

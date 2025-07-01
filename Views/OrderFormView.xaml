@@ -13,12 +13,13 @@
                   DisplayMemberPath="FullName"
                   SelectedItem="{Binding Order.Employee}"
                   Margin="0 0 0 10"/>
-
+        <Button Content="Убрать сотрудника" Command="{Binding ClearEmployeeCommand}"/>
         <TextBlock Text="Контрагент:"/>
         <ComboBox ItemsSource="{Binding Contractors}"
                   DisplayMemberPath="Name"
                   SelectedItem="{Binding Order.Contractor}"
                   Margin="0 0 0 10"/>
+        <Button Content="Убрать контрагента" Command="{Binding ClearContractorCommand}"/>
 
         <Button Content="Сохранить" Command="{Binding SaveCommand}" />
         <TextBlock Text="{Binding ErrorMessage}"

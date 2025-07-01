@@ -24,5 +24,13 @@ namespace HydroOffice.Views
         {
             InitializeComponent();
         }
+
+        private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is DataGridRow row)
+            {
+                row.IsSelected = true;
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using NHibernate;
+﻿using HydroOffice.Database.Models;
+using NHibernate;
 using NHibernate.Linq;
 
 namespace HydroOffice.Database.Repositories.BaseImplementation;
@@ -37,5 +38,26 @@ public class Repository<T>(ISession session) : IRepository<T>
         using var tx = _session.BeginTransaction();
         await _session.DeleteAsync(entity);
         await tx.CommitAsync();
+    }
+
+    public async Task<List<Order>> GetOrdersByEmployeeAsync(Employee employee)
+    {
+        return await _session.Query<Order>()
+            .Where(o => o.Employee.Id == employee.Id)
+            .ToListAsync();
+    }
+
+    public async Task<List<Order>> GetOrdersByContractorAsync(Contractor contractor)
+    {
+        return await _session.Query<Order>()
+            .Where(o => o.Contractor.Id == contractor.Id)
+            .ToListAsync();
+    }
+
+    public async Task<List<Contractor>> GetContractorsByEmployeeAsync(Employee employee)
+    {
+        return await _session.Query<Contractor>()
+            .Where(c => c.Curator.Id == employee.Id)
+            .ToListAsync();
     }
 }

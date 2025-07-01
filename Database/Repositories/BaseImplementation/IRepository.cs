@@ -1,4 +1,6 @@
-﻿namespace HydroOffice.Database.Repositories.BaseImplementation;
+﻿using HydroOffice.Database.Models;
+
+namespace HydroOffice.Database.Repositories.BaseImplementation;
 
 public interface IRepository<T> where T : class
 {
@@ -7,4 +9,7 @@ public interface IRepository<T> where T : class
     Task AddAsync(T entity);
     Task UpdateAsync(T entity);
     Task DeleteAsync(T entity);
+    Task<List<Order>> GetOrdersByEmployeeAsync(Employee employee);
+    Task<List<Order>> GetOrdersByContractorAsync(Contractor contractor);
+    Task<List<Contractor>> GetContractorsByEmployeeAsync(Employee employee);
 }

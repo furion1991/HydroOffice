@@ -1,9 +1,10 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using HydroOffice.Commands;
+﻿using HydroOffice.Commands;
 using HydroOffice.Database.Models;
 using HydroOffice.Database.Repositories.BaseImplementation;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace HydroOffice.ViewModels;
 
@@ -12,7 +13,7 @@ public class EmployeeListViewModel : INotifyPropertyChanged
     private readonly IRepository<Employee> _repository;
     private readonly Action<Employee?> _onEditRequested;
 
-
+    private readonly IRepository<Order> _orderRepository;
     public ObservableCollection<Employee> Employees { get; set; } = [];
 
     public RelayCommand AddCommand { get; }
@@ -27,14 +28,14 @@ public class EmployeeListViewModel : INotifyPropertyChanged
         set { _selectedEmployee = value; OnPropertyChanged(); }
     }
 
-    public EmployeeListViewModel(IRepository<Employee> repository, Action<Employee?> onEditRequested)
+    public EmployeeListViewModel(IRepository<Employee> repository, Action<Employee?> onEditRequested, IRepository<Order> orderRepository)
     {
         _repository = repository;
         _onEditRequested = onEditRequested;
         AddCommand = new RelayCommand(_ => _onEditRequested(null));
         EditCommand = new RelayCommand(_ => _onEditRequested(SelectedEmployee), _ => SelectedEmployee != null);
         DeleteCommand = new RelayCommand(async _ => await DeleteEmployee(), _ => SelectedEmployee != null);
-
+        _orderRepository = orderRepository;
         _ = LoadEmployees();
     }
 
@@ -55,14 +56,35 @@ public class EmployeeListViewModel : INotifyPropertyChanged
 
     private async Task DeleteEmployee()
     {
-        if (SelectedEmployee == null)
+        if (SelectedEmployee == null) return;
+        var result = MessageBox.Show(
+            $"Вы уверены, что хотите удалить сотрудника \"{SelectedEmployee.FullName}\"?",
+            "Подтверждение удаления",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Warning
+        );
+
+        if (result != MessageBoxResult.Yes)
+            return;
+        var usedOrders = await _orderRepository.GetOrdersByEmployeeAsync(SelectedEmployee);
+        if (usedOrders.Any())
         {
+            MessageBox.Show("Невозможно удалить сотрудника, он участвует в заказах.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
+
+        var contractors = await _repository.GetContractorsByEmployeeAsync(SelectedEmployee);
+
+        if (contractors.Any())
+        {
+            MessageBox.Show("Невозможно удалить сотрудника, пока он курирует одного из контрагентов.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
         await _repository.DeleteAsync(SelectedEmployee);
         await LoadEmployees();
-
     }
+
 
 
     public event PropertyChangedEventHandler? PropertyChanged;

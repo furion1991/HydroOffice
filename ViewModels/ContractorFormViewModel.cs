@@ -29,7 +29,7 @@ public class ContractorFormViewModel : INotifyPropertyChanged
     public ObservableCollection<Employee> Employees { get; } = new();
 
     public RelayCommand SaveCommand { get; }
-
+    public RelayCommand RemoveCuratorCommand { get; }
     public ContractorFormViewModel(
         IRepository<Contractor> contractorRepository,
         IRepository<Employee> employeeRepository,
@@ -44,7 +44,7 @@ public class ContractorFormViewModel : INotifyPropertyChanged
 
         Contractor = contractor ?? new Contractor();
         SaveCommand = new RelayCommand(async _ => await Save());
-
+        RemoveCuratorCommand = new RelayCommand(_ => RemoveCurator());
         _ = LoadEmployees();
     }
 
@@ -63,11 +63,7 @@ public class ContractorFormViewModel : INotifyPropertyChanged
             return;
         }
 
-        if (Contractor.Curator == null)
-        {
-            ShowError("Выберите куратора");
-            return;
-        }
+   
 
         try
         {
@@ -95,7 +91,13 @@ public class ContractorFormViewModel : INotifyPropertyChanged
                 Employees.Add(emp);
         });
     }
-
+    public void RemoveCurator()
+    {
+        if (Contractor != null)
+        {
+            Contractor.Curator = null;
+        }
+    }
     public event PropertyChangedEventHandler? PropertyChanged;
     private void OnPropertyChanged([CallerMemberName] string? name = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

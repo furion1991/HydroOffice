@@ -3,6 +3,7 @@ using HydroOffice.Database.Repositories.BaseImplementation;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using HydroOffice.Database.Models;
 
 namespace HydroOffice.ViewModels;
@@ -48,6 +49,15 @@ public class OrderListViewModel : INotifyPropertyChanged
 
     private async Task Delete()
     {
+        var result = MessageBox.Show(
+            $"Удалить заказ от {SelectedOrder.Date:dd.MM.yyyy} на сумму {SelectedOrder.Amount}?",
+            "Подтверждение удаления",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Warning
+        );
+
+        if (result != MessageBoxResult.Yes)
+            return;
         if (SelectedOrder == null) return;
         await _repository.DeleteAsync(SelectedOrder);
         await Load();
