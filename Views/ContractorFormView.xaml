@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="HydroOffice.Views.ContractorFormView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel Margin="20" Width="300">
+        <TextBlock Text="Наименование:"/>
+        <TextBox Text="{Binding Contractor.Name, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 0 10"/>
+
+        <TextBlock Text="ИНН:"/>
+        <TextBox Text="{Binding Contractor.INN}" Margin="0 0 0 10"/>
+
+        <TextBlock Text="Куратор:"/>
+        <ComboBox ItemsSource="{Binding Employees}"
+                  DisplayMemberPath="FullName"
+                  SelectedItem="{Binding Contractor.Curator}"
+                  Margin="0 0 0 10"/>
+
+        <Button Content="Сохранить" Command="{Binding SaveCommand}" />
+        <TextBlock Text="{Binding ErrorMessage}" 
+                   Foreground="Red"
+                   Margin="0 10 0 0"
+                   TextWrapping="Wrap"
+                   FontWeight="Bold"/>
+    </StackPanel>
+</UserControl>

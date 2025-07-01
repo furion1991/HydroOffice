@@ -1,0 +1,28 @@
+﻿<Application x:Class="HydroOffice.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:HydroOffice"
+             xmlns:vm="clr-namespace:HydroOffice.ViewModels"
+             xmlns:views="clr-namespace:HydroOffice.Views"
+             Startup="ApplicationStartup">
+    <Application.Resources>
+        <DataTemplate DataType="{x:Type vm:EmployeeListViewModel}">
+            <views:EmployeeListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:EmployeeFormViewModel}">
+            <views:EmployeeFormView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ContractorListViewModel}">
+            <views:ContractorListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:OrderListViewModel}">
+            <views:OrderListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ContractorFormViewModel}">
+            <views:ContractorFormView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:OrderFormViewModel}">
+            <views:OrderFormView/>
+        </DataTemplate>
+    </Application.Resources>
+</Application>
